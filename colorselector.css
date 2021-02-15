@@ -1,0 +1,11 @@
+#colorselect {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 250px;
+}
+
+#showcolor {
+  width: 100px;
+  height: 100px;
+  background-color: black;
+}
