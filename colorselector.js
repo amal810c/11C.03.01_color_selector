@@ -12,33 +12,51 @@ function initPage() {
 
 function readSelectedColor() {
   console.log("This is your selected color");
-  let selectedColor = document.getElementById("colorselect").value;
-  console.log(selectedColor);
-  showSelectedColor(selectedColor);
+  let hexColor = document.getElementById("colorselect").value;
+  console.log(hexColor);
+  showSelectedColor(hexColor);
 }
 
-function showSelectedColor(event) {
-  document.querySelector("#showcolor").style.backgroundColor = event;
-  showHex(event);
+function showSelectedColor(hexColor) {
+  const rgb = hexToRgb(hexColor);
+  const cssString = rgbToCss(rgb);
+  const hex = rgbToHex(rgb);
+  const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+  colorTheBox(hexColor);
+  showHex(hex);
+  showRgb(cssString);
+  showHsl(hsl);
 }
 
-function showHex(selectedColor) {
-  document.getElementById("hexcolor").value = selectedColor.toString();
-  hexToRgb(selectedColor);
-}
-
-function hexToRgb(string) {
+function hexToRgb(hexColor) {
   //split hex into tree parts and convert to numbers
-  const r = parseInt(string.substring(1, 3), 16);
-  const g = parseInt(string.substring(3, 5), 16);
-  const b = parseInt(string.substring(5, 7), 16);
+  const r = parseInt(hexColor.substring(1, 3), 16);
+  const g = parseInt(hexColor.substring(3, 5), 16);
+  const b = parseInt(hexColor.substring(5, 7), 16);
   console.log(`${r} ${g} ${b}`);
-  showRgb(r, g, b);
+  //her retuneres et object
+  return { r, g, b };
 }
 
-function showRgb(r, g, b) {
-  document.getElementById("rgbcolor").value = `${r} ${g} ${b}`;
-  rgbToHsl(r, g, b);
+function rgbToCss(rgb) {
+  return `rgb( ${rgb.r}, ${rgb.g}, ${rgb.b} )`;
+}
+
+function rgbToHex(rgb) {
+  let r = rgb.r.toString(16);
+  let g = rgb.g.toString(16);
+  let b = rgb.b.toString(16);
+  if (r.length < 2) {
+    r = "0" + r;
+  }
+  if (g.length < 2) {
+    g = "0" + g;
+  }
+  if (b.length < 2) {
+    b = "0" + b;
+  }
+
+  return `#${r}${g}${b}`;
 }
 
 function rgbToHsl(r, g, b) {
@@ -77,11 +95,22 @@ function rgbToHsl(r, g, b) {
   l *= 100;
 
   console.log("hsl(%f,%f%,%f%)", h, s, l); // just for testing
-  showHsl(h, s, l);
+
+  return `${h.toFixed(0)}, ${s.toFixed(0)}%, ${l.toFixed(0)}%`;
 }
 
-function showHsl(h, s, l) {
-  document.getElementById("hslcolor").value = `${h.toFixed(0)} ${s.toFixed(
-    0
-  )}% ${l.toFixed(0)}%`;
+function colorTheBox(hexColor) {
+  document.querySelector("#showcolor").style.backgroundColor = hexColor;
+}
+
+function showHex(hexColor) {
+  document.getElementById("hexcolor").value = hexColor;
+}
+
+function showRgb(cssString) {
+  document.getElementById("rgbcolor").value = cssString;
+}
+
+function showHsl(hsl) {
+  document.getElementById("hslcolor").value = hsl;
 }
